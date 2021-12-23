@@ -25,6 +25,17 @@ async function run() {
       const savetodb = await usersCollection.insertOne(user);
       res.send(savetodb);
     });
+    app.get("/getadmin/:email", async (req, res) => {
+      const userEmail = req.params.email;
+      const user = await usersCollection.findOne({ email: userEmail });
+      if (user) {
+        if (user.role === "admin") {
+          res.send({ admin: true });
+        }
+      } else {
+        res.send({ admin: false });
+      }
+    });
   } finally {
   }
 }
