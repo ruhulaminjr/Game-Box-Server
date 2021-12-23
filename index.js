@@ -18,7 +18,13 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    console.log("db connected succesfuly");
+    const userDb = client.db("gamebox");
+    const usersCollection = userDb.collection("users");
+    app.post("/saveusers", async (req, res) => {
+      const user = req.body;
+      const savetodb = await usersCollection.insertOne(user);
+      res.send(savetodb);
+    });
   } finally {
   }
 }
