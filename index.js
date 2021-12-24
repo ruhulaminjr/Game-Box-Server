@@ -36,6 +36,27 @@ async function run() {
         res.send({ admin: false });
       }
     });
+    app.get("/makeadmin/:email", async (req, res) => {
+      const email = req.params.email;
+      const finduser = await usersCollection.findOne({ email });
+      const options = { upsert: true };
+      // create a document that sets the plot of the movie
+      const updateDoc = {
+        $set: {
+          role: "admin",
+        },
+      };
+      if (finduser) {
+        const updateUser = await usersCollection.updateOne(
+          { email },
+          updateDoc,
+          options
+        );
+        res.send(updateUser);
+      } else {
+        res.status(404);
+      }
+    });
   } finally {
   }
 }
