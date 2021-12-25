@@ -20,6 +20,7 @@ async function run() {
     await client.connect();
     const userDb = client.db("gamebox");
     const usersCollection = userDb.collection("users");
+    const usersCarts = userDb.collection("userCarts");
     app.post("/saveusers", async (req, res) => {
       const user = req.body;
       const savetodb = await usersCollection.insertOne(user);
@@ -56,6 +57,12 @@ async function run() {
       } else {
         res.status(404);
       }
+    });
+    // add to cart route
+    app.post("/addtocart", async (req, res) => {
+      const cartItem = req.body;
+      const addCart = await usersCarts.insertOne(cartItem);
+      res.send(addCart);
     });
   } finally {
   }
