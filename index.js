@@ -64,6 +64,20 @@ async function run() {
       const addCart = await usersCarts.insertOne(cartItem);
       res.send(addCart);
     });
+    app.get("/getcarts/:email", async (req, res) => {
+      const email = req.params.email;
+      const findCart = await usersCarts.find({ email }).toArray();
+      if (findCart.length > 0) {
+        res.send(findCart);
+      } else {
+        res.send([]);
+      }
+    });
+    app.delete("/cartdelete/:id", async (req, res) => {
+      const id = ObjectId(req.params.id);
+      const deleted = await usersCarts.deleteOne({ _id: id });
+      res.send(deleted);
+    });
   } finally {
   }
 }
