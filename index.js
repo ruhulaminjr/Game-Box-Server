@@ -78,6 +78,27 @@ async function run() {
       const deleted = await usersCarts.deleteOne({ _id: id });
       res.send(deleted);
     });
+    app.get("/getcarts", async (req, res) => {
+      const allcarts = await usersCarts.find({}).toArray();
+      res.send(allcarts);
+    });
+    app.put("/approveCart/:id", async (req, res) => {
+      const id = ObjectId(req.params.id);
+      const options = { upsert: true };
+      // create a document that sets the plot of the movie
+      const updateDoc = {
+        $set: {
+          status: "approved",
+        },
+      };
+      const update = await usersCarts.updateOne(
+        { _id: id },
+        updateDoc,
+        options
+      );
+      res.send(update);
+    });
+    
   } finally {
   }
 }
